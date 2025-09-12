@@ -27,6 +27,10 @@ git clone https://github.com/Aziz2805/PIP.git
 # Accédez au dossier cloné :
 cd PIP
 
+# Créer un environnement virtuel et l'activer
+python -m venv pip_env
+pip_env\Scripts\activate
+
 # Installer les dépendances
 pip install -r requirements.txt
 
@@ -53,3 +57,4 @@ PS: Le dossier utils (contenant les données et les scripts de prétraitement) �
 ## ✨ Profitez-en !
 
 Parcourez les données et visualisez les informations clés des Petites Villes de Demain.
+
