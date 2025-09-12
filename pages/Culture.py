@@ -158,14 +158,20 @@ layout = html.Div([
     Input("map", "clickData"),
 )
 
+def empty_fig(title=""):
+    fig = go.Figure()
+    if title:
+        fig.update_layout(title=title)
+    return fig
+
 def update_charts(click_data):
     if click_data:
         index = click_data["points"][0]["location"]
         dept = departements.iloc[int(index)]
         filtered_df = df[df['Département'] == dept['nom']]
         filtered_festivals = festivals_pvd[festivals_pvd['Département principal de déroulement'] == dept['nom']]
-        #print(filtered_df['Département'])
-        if not filtered_df.empty :
+
+        if not filtered_df.empty:
             # Nombre total d'équipements
             total_equipments = filtered_df.shape[0]
             total_heritage = filtered_df[filtered_df['Catégorie'] == 'Patrimonial'].shape[0]
@@ -176,36 +182,33 @@ def update_charts(click_data):
             pie_fig = px.pie(
                 names=proportions.index,
                 values=proportions.values,
-                title=f'Proportions des catégories : Patrimoniaux vs Actives',
-                title_x=0.5,
+                title=f'Proportions des catégories : Patrimoniaux vs Actifs',
                 color_discrete_sequence=['skyblue', 'lightgreen'],
                 hole=0.4
             )
 
-            # Bar plot
-            #bar_fig = px.histogram(filtered_df, x="Type équipement ou lieu", histfunc="sum", title="Proportions des équipements culturels")
-            #bar_fig.update_layout(barmode='stack', xaxis_title="Type d'équipement", yaxis_title="Capacité totale")
-            # New plot: Distribution of Disciplines 
+            # Bar plot disciplines
             discipline_counts = filtered_festivals['Discipline dominante'].value_counts().reset_index() 
             discipline_counts.columns = ['Discipline', 'Count'] 
-            discipline_fig = px.bar( 
+            discipline_fig = px.bar(
                 discipline_counts, 
                 x='Discipline', 
                 y='Count', 
                 labels={'Discipline': 'Discipline Dominante', 'Count': 'Nombre de Festivals'}, 
                 title=f"Répartition des Disciplines des Festivals dans les PVDs de {dept['nom']}", 
-                color='Discipline' 
-            ) 
-            discipline_fig.update_layout( 
+                color='Discipline'
+            )
+            discipline_fig.update_layout(
                 xaxis_title="Discipline Dominante", 
                 yaxis_title="Nombre de Festivals", 
                 xaxis_tickangle=-45 
             )
 
-            # Nouveau graphique : Répartition des équipements par type et catégorie
+            # Stacked bar équipements
             stacked_bar_fig = px.bar(
                 filtered_df.groupby(['Type équipement ou lieu', 'Catégorie']).size().reset_index(name='Count'),
-                x="Type équipement ou lieu", y="Count", color="Catégorie", title=f"Répartition des équipements par type et catégorie dans les PVDs",
+                x="Type équipement ou lieu", y="Count", color="Catégorie",
+                title=f"Répartition des équipements par type et catégorie dans les PVDs",
                 barmode="stack",
                 color_discrete_sequence=['skyblue', 'lightgreen']
             )
@@ -216,20 +219,55 @@ def update_charts(click_data):
             )
 
             # Domain histogram
-            domain_hist_fig = px.histogram(filtered_df, x="Domaine", color="Sous-domaine", title="Répartition des équipements par domaine et sous-domaine")
+            domain_hist_fig = px.histogram(
+                filtered_df,
+                x="Domaine", color="Sous-domaine",
+                title="Répartition des équipements par domaine et sous-domaine"
+            )
 
-            #map density nbr de place au cinéma
-            map2 = px.density_mapbox(filtered_df, lat="Latitude", lon="Longitude", z="Nombre_fauteuils_de_cinema",
-                            radius=10, zoom=6,
-                            mapbox_style="open-street-map", title="Heatmap du nombre d\'équipements dans les PVDs")
+            # Heatmap
+            map2 = px.density_mapbox(
+                filtered_df,
+                lat="Latitude", lon="Longitude", z="Nombre_fauteuils_de_cinema",
+                radius=10, zoom=6,
+                mapbox_style="open-street-map",
+                title="Heatmap du nombre d'équipements dans les PVDs"
+            )
 
-            
+            return (
+                pie_fig,
+                stacked_bar_fig,
+                domain_hist_fig,
+                map2,
+                discipline_fig,
+                f"Nombre total d'équipements : {total_equipments}",
+                f"Nombre d'équipements patrimoniaux : {total_heritage}",
+                f"Nombre d'équipements vivants : {total_living}"
+            )
 
-            return pie_fig, stacked_bar_fig, domain_hist_fig, map2, discipline_fig, f"Nombre total d'équipements : {total_equipments}", f"Nombre d'équipements patrimoniaux : {total_heritage}", f"Nombre d'équipements vivants : {total_living}"
-        else:
-            return px.pie(), "Cliquez sur un département pour afficher les informations.", px.histogram(), px.bar(), px.histogram(), px.density_mapbox(), {}, "", "", ""
+        # Cas département vide
+        return (
+            empty_fig("Aucune donnée disponible"),
+            empty_fig(),
+            empty_fig(),
+            empty_fig(),
+            empty_fig(),
+            "Cliquez sur un département pour afficher les informations.",
+            "",
+            ""
+        )
 
-    return px.pie(), "Cliquez sur un département pour afficher les informations.", px.histogram(), px.bar(), px.histogram(), px.density_mapbox(), {}, "", "", ""
+    # Cas aucun clic
+    return (
+        empty_fig("En attente d'une sélection"),
+        empty_fig(),
+        empty_fig(),
+        empty_fig(),
+        empty_fig(),
+        "Cliquez sur un département pour afficher les informations.",
+        "",
+        ""
+    )
 
 
 

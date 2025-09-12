@@ -1,0 +1,10 @@
+#Environnements virtuels
+pip_env/
+.venv/
+venv/
+
+#Caches python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
