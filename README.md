@@ -17,11 +17,7 @@
 1. Ouvrir un terminal et exécuter le script suivant :
 
 ```bash
-
-# Déplacez-vous dans le dossier où vous souhaitez cloner le projet :
-cd /chemin/vers/dossier/
-
-# Clonez le dépôt GitHub :
+# Clonez le dépôt :
 git clone https://github.com/Aziz2805/PIP.git
 
 # Accédez au dossier cloné :
@@ -57,4 +53,5 @@ PS: Le dossier utils (contenant les données et les scripts de prétraitement) �
 ## ✨ Profitez-en !
 
 Parcourez les données et visualisez les informations clés des Petites Villes de Demain.
+
 
