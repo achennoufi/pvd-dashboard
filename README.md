@@ -39,7 +39,7 @@ echo "Téléchargement des données depuis Google Drive..."
 gdown "https://drive.google.com/uc?id=1o0UXLmnEsX0Rqe896gUW0gozul-H_Yp-" -O "utils.zip" || { echo "Échec du téléchargement. Vérifiez l'ID du fichier."; exit 1; }
 
 # Charger les données
-python laodData.py
+python loadData.py
 
 # Lancer l'application
 python app.py
@@ -54,6 +54,7 @@ PS: Le dossier utils (contenant les données et les scripts de prétraitement) �
 ## ✨ Profitez-en !
 
 Parcourez les données et visualisez les informations clés des Petites Villes de Demain.
+
 
 
 
