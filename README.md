@@ -21,7 +21,7 @@
 git clone https://github.com/achennoufi/pvd-dashboard.git
 
 # Accédez au dossier cloné :
-cd PIP
+cd pvd-dashboard
 
 # Créer un environnement virtuel et l'activer
 python -m venv pip_env
