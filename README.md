@@ -18,7 +18,7 @@
 
 ```bash
 # Clonez le dépôt :
-git clone https://github.com/Aziz2805/PIP.git
+git clone https://github.com/achennoufi/PIP.git
 
 # Accédez au dossier cloné :
 cd PIP
