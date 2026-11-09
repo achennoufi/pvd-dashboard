@@ -18,7 +18,7 @@
 
 ```bash
 # Clonez le dépôt :
-git clone https://github.com/achennoufi/PIP.git
+git clone https://github.com/achennoufi/pvd-dashboard.git
 
 # Accédez au dossier cloné :
 cd PIP
